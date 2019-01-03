@@ -10,9 +10,6 @@
 
 using namespace std;
 
-class not_found:public std::exception{};
-
-
 template<class S, class T,class UpdateFunc>
 class AVL_Tree {
     class Node {

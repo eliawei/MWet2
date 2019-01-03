@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Hash.h"
+#include "UnionFind.h"
+#include "assert.h"
 
 int main() {
     Hash* hash1=new Hash();
@@ -33,5 +35,21 @@ catch (exception& e){
     }
 
 delete hash1;
+
+
+    UnionFind* uf = new UnionFind(50);
+
+    for (int i = 0; i < 50; ++i) {
+        assert(uf->Find(i) == i);
+    }
+
+    for (int j = 0; j < 50; j+=2) {
+        assert(uf->Union(j,j+1) == j);
+    }
+
+
+    assert(uf->getNumOfGroups() == 25);
+
+    delete uf;
     return 0;
 }

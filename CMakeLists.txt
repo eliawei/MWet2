@@ -3,5 +3,4 @@ project(Hash)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Hash main.cpp Hash.cpp Hash.h DynamicArr.cpp DynamicArr.h List.h Image.h
-        Image.cpp exceptions.h)
+add_executable(Hash main.cpp Hash.cpp Hash.h List.h Image.h Image.cpp exceptions.h AVL_Tree.h Label.h UnionFind.h)
