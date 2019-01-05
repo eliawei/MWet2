@@ -21,14 +21,14 @@ public:
         int max_score = label.getScore();
         int max_label = label.getLabel_id();
 
-        if(r.getScore() > max_score) {
-            max_score = r.getScore();
-            max_label = r.getLabel_id();
-        }
-
         if(l.getScore() > max_score) {
             max_score = l.getScore();
             max_label = l.getLabel_id();
+        }
+
+        if(r.getScore() >= max_score) {
+            max_score = r.getScore();
+            max_label = r.getLabel_id();
         }
 
         label.setMax_label(max_label);
@@ -40,7 +40,6 @@ class UnionFind {
     int num_of_groups;
     int* size;
     int* parent;
-
     AVL_Tree<int, Label*, UpdateLabel>** labels;
 
 

@@ -12,9 +12,6 @@
 using namespace std;
 
 class Hash {
-    class hash_already_exists: public std::exception{};
-    class hash_doesnt_exist: public std::exception{};
-private:
 
     int table_size=8;
                      //HASH INTS SHOULD I LET IT COMPRESS TO LESS THAN 8?
