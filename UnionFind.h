@@ -68,6 +68,15 @@ public:
     }
 
     /**
+     * union find d'tor - deletes the structure and all of it's fields.
+     */
+    virtual ~UnionFind() {
+        delete this->size;
+        delete this->parent;
+        delete this->labels;
+    }
+
+    /**
      * finding the root of the group that i is include in.
      * @param i - element that we want his root.
      * @return root of the group that i is include in.
@@ -90,9 +99,17 @@ public:
         return root;
     }
 
-    Label* FindData(int i) {
+    /**
+     * finding the root's data of the group that i is include in.
+     * @param i - element that we want his root's data
+     * @return root's data.
+     */
+    AVL_Tree<int, Label*, UpdateLabel>* FindData(int i) {
+        int dataId = this->Find(i);
 
+        return this->labels[dataId];
     }
+
     /**
      * unite two groups to one group.
      * @param p - root of the first groups to unite.
@@ -125,6 +142,14 @@ public:
         return this->num_of_groups;
     }
 
+    void print() {
+        cout << "num of groups: " << this->num_of_groups << "\n";
+        for (int i = 0; i < this->num_of_groups; ++i) {
+            cout << "pixel num: " << i << " size is: " << size[i] << " parent is: " << parent[i] << " tree is: ";
+            labels[i]->print();
+            cout << "\n";
+        }
+    }
 };
 
 

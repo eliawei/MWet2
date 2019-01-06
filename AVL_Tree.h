@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include "exceptions.h"
 
 using namespace std;
 
@@ -186,6 +187,32 @@ class AVL_Tree {
             }
 
         }
+
+        void print_node() {
+            int left_key;
+            if (left) {
+                left_key = left->key;
+            } else {
+                left_key = -1;
+            }
+            int right_key;
+            if (right) {
+                right_key = right->key;
+            } else {
+                right_key = -1;
+            }
+
+            int parent_key;
+            if (parent) {
+                parent_key = parent->key;
+            } else {
+                parent_key = -1;
+            }
+
+            cout << " key: " << key << " parent: " << parent_key <<
+                 //" Data: " << data  <<
+                 " left: " << left_key << " right: " << right_key << " height: " << height << endl;
+        }
     };
 
 private:
@@ -199,7 +226,7 @@ private:
      */
     void update_path_data(Node* node) {
         while(node){
-            update_data(node->data,node->left->data,node->right->data);
+            update_data(*(node->data), *(node->left->data), *(node->right->data));
             node=node->parent;
         }
     }
@@ -345,6 +372,14 @@ public:
     }
 
     /**
+     * gets root's data.
+     * @return data of the root.
+     */
+    T getRootData() {
+        return this->root->data;
+    }
+
+    /**
      * inserts a new node to the tree with the given key and data.
      * @param key - key of the new node.
      * @param data - data of the new node.
@@ -387,9 +422,9 @@ public:
      */
     Node *find(const S &key) {
         Node *found = internal_find(root, key);
-        if (!found) {
+        /*if (!found) {
             throw not_found();
-        }
+        }*/
         return found;
     }
 
@@ -484,6 +519,29 @@ public:
         tree_to_array_aux(arr,root,i);
         return arr;
     }
+
+    /**
+    * prints out the tree.
+    */
+    void print() {
+        this->print_in_order(root);
+    }
+
+    /**
+    * Prints out the tree in an in order method.
+    * @param root: starts from given root.
+    */
+    void print_in_order(Node *node) {
+
+        if (node == nullptr) {
+            return;
+        }
+        print_in_order(node->left);
+        node->print_node();
+        print_in_order(node->right);
+    }
+
+
 };
 
 #endif //MWET1_AVL_TREE_H

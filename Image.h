@@ -12,7 +12,7 @@
 class Image {
 private:
     int id; // image id number
-    UnionFind super_pixels;
+    UnionFind* super_pixels;
 
 public:
     /**
@@ -34,47 +34,39 @@ public:
     int get_id();
 
     /**
-     * setter of the segment's label.
-     * @param seg_id - the segment to be labeled..
-     * @param label - the label number.
+     * tagging the pixel's super pixel with the given label and score.
+     * @param pixel - pixel that we want to tag his super pixel.
+     * @param label - label for tagging.
+     * @param score - score of the label for tagging.
      */
-    void add_label(int seg_id,int label);
+    void SetImScore(int pixel, int label, int score);
 
     /**
-     * getter of the segment's label.
-     * @param seg_id - the segment number.
-     * @return the segment's label number.
+     * removing the label from the pixel's super pixel.
+     * @param pixel - pixel that we want to un-tag his super pixel.
+     * @param label - label to un-tag.
      */
-    int get_label(int seg_id);
+    void RemoveImLabel(int pixel, int label);
 
     /**
-     * remove the segment's label.
-     * @param seg_id - the segment number.
+     * getting the label-id with the highest score at the pixel's super pixel.
+     * @param pixel - pixel that we want to find the highest score in his group.
+     * @return - label number that has the maximum score.
      */
-    void delete_label(int seg_id);
+    int GetImMaxLabel(int pixel);
 
     /**
-     * exporting all the unlabeled segments og the image to an array.
-     * @param numOfSegments - pointer for a variable that will
-     *                        contain the amount of the unlabeled segments.
-     * @return an array filled with the unlabeled segments numbers.
+     * merging two super pixels.
+     * @param pixel1 - pixel included in the first wanted super pixel.
+     * @param pixel2 - pixel included in the second wanted super pixel.
      */
-    int* get_all_unlabled_segments(int* numOfSegments);
+    void MergeImSuperPixels(int pixel1, int pixel2);
 
-    /**
-     * exporting all the segments that are labeled with the given label.
-     * @param label - the wanted label.
-     * @return an array filled with the labeled segments numbers.
-     */
-    int* get_all_segments_by_label(int label);
-
-    /**
-     * counting the amount of segments that are labeled with the given label.
-     * @param label - the wanted label.
-     * @return the amount of the wanted segments.
-     */
-    int get_num_of_segments_by_label(int label);
-
+    void print() {
+        cout << "\nthe id is: " << this->id << " the UF is:\n";
+        this->super_pixels->print();
+        cout << "\n";
+    }
 };
 
 
