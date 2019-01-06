@@ -12,6 +12,7 @@ class Label {
     int max_score; // the highest score in the subtree.
 
 public:
+    friend ostream& operator<<(ostream& os, const Label& label);
 
     /**
      * basic c'tor' constructs a label with given score.
@@ -77,5 +78,11 @@ public:
         this->max_score = max_score;
     }
 };
+
+
+inline ostream& operator<<(ostream& os, const Label& label) {
+    return os << "label id: " << label.label_id << " label score: "  << label.score << " label max_score: " << label.max_score << " label max_label: " <<label.max_label << "\n";
+}
+
 
 #endif //UNIONFIND_LABEL_H

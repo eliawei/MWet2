@@ -7,9 +7,8 @@
 
 #include <iostream>
 #include "exceptions.h"
-using namespace std;
 
-//class not_found : public std::exception {};
+using namespace std;
 
 template<class K, class D>
 class List {

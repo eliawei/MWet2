@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <iostream>
 #include "exceptions.h"
-
 using namespace std;
 
 template<class S, class T,class UpdateFunc>
@@ -210,7 +209,7 @@ class AVL_Tree {
             }
 
             cout << " key: " << key << " parent: " << parent_key <<
-                 //" Data: " << data  <<
+                 " Data: " << *data  <<
                  " left: " << left_key << " right: " << right_key << " height: " << height << endl;
         }
     };
@@ -536,7 +535,10 @@ public:
     * prints out the tree.
     */
     void print() {
-        this->print_in_order(root);
+        if(this) {
+            this->print_in_order(root);
+
+        }
     }
 
     /**

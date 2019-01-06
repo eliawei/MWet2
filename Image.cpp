@@ -4,7 +4,6 @@
 
 #include "Image.h"
 #include "exceptions.h"
-using namespace std;
 
 Image::Image(int imageId, int pixels): id(imageId),
                                        super_pixels(new UnionFind(pixels)){}

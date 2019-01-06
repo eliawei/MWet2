@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Hash.h"
-#include "UnionFind.h"
 #include "assert.h"
 #include "Image.h"
 
@@ -54,21 +53,29 @@ assert(uf->getNumOfGroups() == 25);
 delete uf;
 
 cout <<"\ngil's tests!!!:\n";
-    const int arr_size2=200;
-    Image* arr2[arr_size2];
+    Image* arr2[100];
     try {
         for (int i = 0; i < 100; ++i) {
-            arr2[i]=new Image(i,5);
+            arr2[i]=new Image(i,6);
         }
 
-        for (int i = 0; i < 100; i+=2) {
+        for (int i = 0; i < 100; ++i) {
             arr2[i]->print();
-            arr2[i]->SetImScore(i, 1, i);
-            arr2[i]->SetImScore(i+1, 1, i+1);
-            arr2[i]->MergeImSuperPixels(i, i+1);
+            for (int j = 0; j < 6; ++j) {
+                arr2[i]->SetImScore(j, 1, j);
+            }
+            arr2[i]->print();
         }
 
-        for (int k = 0; k <arr_size2; ++k) {
+        for (int i = 0; i < 100; ++i) {
+            for (int j = 0; j < 6; j+=2) {
+                arr2[i]->MergeImSuperPixels(j, j+1);
+                arr2[i]->print();
+            }
+        }
+
+
+        for (int k = 0; k < 100; ++k) {
             delete arr2[k];
         }
 

@@ -9,7 +9,6 @@
 #include "List.h"
 #include "Image.h"
 #include <iostream>
-using namespace std;
 
 class Hash {
 
