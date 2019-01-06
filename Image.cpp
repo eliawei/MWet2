@@ -19,15 +19,13 @@ int Image::get_id() {
 
 void Image::SetImScore(int pixel, int label, int score) {
     AVL_Tree<int, Label*, UpdateLabel>* tree = super_pixels->FindData(pixel);
-    Label** wanted_label;
+    Label* wanted_label = tree->search(label);
 
-    tree->search(label, (void**)wanted_label);
-    void** temp;
-    if(*wanted_label = nullptr) {
+    if(!wanted_label) {
         Label* new_label = new Label(label, score);
-        tree->insert(label, new_label, temp);
+        tree->insert(label, new_label);
     } else {
-        (*wanted_label)->setScore(score);
+        wanted_label->setScore(score);
     }
 }
 

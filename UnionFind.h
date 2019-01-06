@@ -17,27 +17,28 @@ public:
     * @param r - data of right son.
     * @param l - data of left son.
     */
-    void operator()(Label& label, Label& r, Label& l) {
-        int max_score = label.getScore();
-        int max_label = label.getLabel_id();
+    void operator()(Label* label, Label* r, Label* l) {
+        int max_score = label->getScore();
+        int max_label = label->getLabel_id();
 
-        if(l.getScore() > max_score) {
-            max_score = l.getScore();
-            max_label = l.getLabel_id();
+        if(l && l->getScore() > max_score) {
+            max_score = l->getScore();
+            max_label = l->getLabel_id();
         }
 
-        if(r.getScore() >= max_score) {
-            max_score = r.getScore();
-            max_label = r.getLabel_id();
+        if(r && r->getScore() >= max_score) {
+            max_score = r->getScore();
+            max_label = r->getLabel_id();
         }
 
-        label.setMax_label(max_label);
-        label.setMax_score(max_score);
+        label->setMax_label(max_label);
+        label->setMax_score(max_score);
     }
 };
 
 class UnionFind {
     int num_of_groups;
+    int num_of_pixels;
     int* size;
     int* parent;
     AVL_Tree<int, Label*, UpdateLabel>** labels;
@@ -50,6 +51,7 @@ public:
      */
     UnionFind(int range) {
         num_of_groups = range;
+        num_of_pixels = range;
         size = new int[range];
         parent = new int[range];
         labels = new AVL_Tree<int, Label*, UpdateLabel>*[range];
@@ -71,9 +73,14 @@ public:
      * union find d'tor - deletes the structure and all of it's fields.
      */
     virtual ~UnionFind() {
-        delete this->size;
-        delete this->parent;
-        delete this->labels;
+        delete[] this->size;
+        delete[] this->parent;
+
+        for(int i = 0; i < num_of_pixels; ++i) {
+            delete this->labels[i];
+        }
+
+        delete[] this->labels;
     }
 
     /**

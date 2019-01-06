@@ -226,7 +226,17 @@ private:
      */
     void update_path_data(Node* node) {
         while(node){
-            update_data(*(node->data), *(node->left->data), *(node->right->data));
+            T lData = nullptr;
+            if(node->left) {
+                lData = node->left->data;
+            }
+
+            T rData = nullptr;
+            if(node->left) {
+                rData = node->left->data;
+            }
+
+            update_data(node->data, lData, rData);
             node=node->parent;
         }
     }
@@ -385,7 +395,7 @@ public:
      * @param data - data of the new node.
      * @param node - pointer for the new node that was added to the tree.
      */
-    void insert(const S &key, const T &data, void** node) {
+    void insert(const S &key, const T &data) {
         Node* new_node = new Node(key, data);
         if (!root) {
             root = new_node;
@@ -401,7 +411,6 @@ public:
         size++;
         update_heights_insertion(new_node);
         update_path_data(new_node);
-        *node = new_node;
     }
 
     /**
@@ -410,9 +419,12 @@ public:
      * @param value - a pointer to a variable which will contain
      *                the data of the wanted node.
      */
-    void search(const S &key, void** value) {
+    T search(const S &key) {
         Node* wanted_node = find(key);
-        *value = wanted_node->data;
+        if(wanted_node) {
+            wanted_node->data;
+        }
+        return nullptr;
     }
 
     /**
@@ -420,11 +432,11 @@ public:
      * @param key - key of the wanted node.
      * @return
      */
-    Node *find(const S &key) {
+    Node* find(const S &key) {
         Node *found = internal_find(root, key);
-        /*if (!found) {
-            throw not_found();
-        }*/
+        if (!found) {
+            return nullptr;
+        }
         return found;
     }
 
