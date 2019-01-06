@@ -90,6 +90,9 @@ public:
         return root;
     }
 
+    Label* FindData(int i) {
+
+    }
     /**
      * unite two groups to one group.
      * @param p - root of the first groups to unite.

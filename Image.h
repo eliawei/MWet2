@@ -6,24 +6,21 @@
 #define TAGGER_IMAGE_H
 
 #include <ostream>
-#include "List.h"
+#include "UnionFind.h"
 
 
 class Image {
 private:
     int id; // image id number
-    int seg_num; // limit of segments
-    int* segments; // segments label's array.
-    void** pointers; // not_labeled_segments nodes pointers array.
-    List<int,int> not_labeled_segments; // list of the not_labeled_segments.
+    UnionFind super_pixels;
 
 public:
     /**
      * Image c'tor - construct a new Image with given parameters.
      * @param id - the image id number.
-     * @param seg_num - limit of segments.
+     * @param pixels - amount of pixels.
      */
-    Image(int id, int seg_num);
+    Image(int id, int pixels);
 
     /**
      * Image d'tor - deletes the given Image.
