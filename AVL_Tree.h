@@ -290,7 +290,6 @@ private:
         delete node;
     }
 
-
     /**
      * aux function for the insert - find a parent
      *                               for a new node that match the given key.
@@ -422,22 +421,13 @@ private:
 
     }
 
-    void destroy_tree_and_data_aux(Node *node) {
-        if (node == nullptr) {
-            return;
-        }
-        destroy_tree(node->left);
-        destroy_tree(node->right);
-        delete node->data;
-    }
+
 public:
     AVL_Tree(){
         root = nullptr;
         size=0;
     }
-    void destroy_tree_and_data() {
-       destroy_tree_and_data_aux(root);
-    }
+
     /**
      * tree d'tor - deletes the tree and all of it's nodes.
      */
@@ -581,6 +571,9 @@ public:
                 }
 
                 temp->parent = node->parent;
+                if(node->data) {
+                    delete node->data;
+                }
                 delete node;
                 return temp;
             }
@@ -639,6 +632,7 @@ public:
         node->print_node();
         print_in_order(node->right);
     }
+
 
 
 };

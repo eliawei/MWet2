@@ -30,6 +30,7 @@ class UpdateLabel {
             return l2;
         }
     }
+
 public:
     /**
     * updates label by it's sons.
@@ -69,7 +70,7 @@ class UnionFind {
     int *parent;
     AVL_Tree<int, Label *, UpdateLabel> **labels;
 
-    Label **mergeArrays(Label **arr_a, Label **arr_b, int size_a, int size_b,int* new_size) {
+    Label **mergeArrays(Label **arr_a, Label **arr_b, int size_a, int size_b, int *new_size) {
 
         Label **merged_arr = new Label *[size_a + size_b];
         for (int i = 0; i < size_a + size_b; ++i) {
@@ -90,6 +91,7 @@ class UnionFind {
                 int new_score = arr_a[i_a]->getScore() + arr_b[i_b]->getScore();
                 arr_a[i_a]->setScore(new_score);
                 merged_arr[i_merged++] = arr_a[i_a];
+                delete arr_b[i_b];
                 i_a++;
                 i_b++;
                 (*new_size)++;
@@ -114,7 +116,7 @@ class UnionFind {
             keys[i] = arr[i]->getLabel_id();
         }
         merged_tree->sorted_arr_to_tree(keys, arr, size);
-        delete []keys;
+        delete[]keys;
         return merged_tree;
 
     }
@@ -125,12 +127,12 @@ class UnionFind {
 
 
         int size_a = a->getSize();
-        if(size_a<0){
-            size_a=0;
+        if (size_a < 0) {
+            size_a = 0;
         }
         int size_b = b->getSize();
-        if(size_b<0){
-            size_b=0;
+        if (size_b < 0) {
+            size_b = 0;
         }
 
         Label **arr_a = nullptr;
@@ -145,14 +147,11 @@ class UnionFind {
         }
 
         if (size_a > 0 || size_b > 0) {
-            int new_size=0;
-            merged_arr = mergeArrays(arr_a, arr_b, size_a, size_b,&new_size);
+            int new_size = 0;
+            merged_arr = mergeArrays(arr_a, arr_b, size_a, size_b, &new_size);
             merged = insertToTree(merged_arr, new_size);
 
         }
-
-        delete a;
-        delete b;
 
         delete[] arr_a;
         delete[] arr_b;
@@ -163,7 +162,6 @@ class UnionFind {
     }
 
 public:
-
 
 
     /**
@@ -198,7 +196,7 @@ public:
         delete[] this->parent;
 
         for (int i = 0; i < num_of_pixels; ++i) {
-            delete this->labels[i];
+             delete this->labels[i];
         }
 
         delete[] this->labels;
@@ -249,7 +247,10 @@ public:
             parent[q] = p;
             size[p] += size[q];
             size[q] = 0;
-            labels[p] = MergeTree(labels[p], labels[q]);
+            AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
+            delete labels[q];
+            delete labels[p];
+            labels[p] = new_t;
             labels[q] = nullptr;
             num_of_groups--;
 
@@ -258,7 +259,11 @@ public:
             parent[p] = q;
             size[q] += size[p];
             size[p] = 0;
-            labels[q] = MergeTree(labels[q], labels[p]);
+            AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
+            delete labels[q];
+            delete labels[p];
+
+            labels[q] = new_t;
             labels[p] = nullptr;
             num_of_groups--;
 
