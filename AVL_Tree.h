@@ -11,7 +11,7 @@
 
 using namespace std;
 
-template<class S, class T,class UpdateFunc>
+template<class S, class T, class UpdateFunc>
 class AVL_Tree {
     class Node {
         S key; // the key of the node.
@@ -211,7 +211,8 @@ class AVL_Tree {
 
             cout << " key: " << key << " parent: " << parent_key <<
                  //" Data: " << data  <<
-                 " left: " << left_key << " right: " << right_key << " height: " << height << endl;
+                 " left: " << left_key << " right: " << right_key << " height: " << height
+                 << endl;
         }
     };
 
@@ -224,31 +225,55 @@ private:
      * updates the data's in the path to the root.
      * @param node - leaf of the path.
      */
-    void update_path_data(Node* node) {
-        while(node){
+    void update_path_data(Node *node) {
+        while (node) {
             T lData = nullptr;
-            if(node->left) {
+            if (node->left) {
                 lData = node->left->data;
             }
 
             T rData = nullptr;
-            if(node->left) {
-                rData = node->left->data;
+            if (node->right) {
+                rData = node->right->data;
             }
 
             update_data(node->data, lData, rData);
-            node=node->parent;
+            node = node->parent;
         }
     }
 
-    Node *sorted_arr_to_tree_aux(S* keys, T *arr, int start, int end) {
+    void update_heights_rank(Node* node){
+        if(!node){
+            return;
+        }
+        if(node->left== nullptr&&node->right== nullptr){
+            node->height=0;
+            return;
+        }
+        update_heights_rank(node->left);
+        update_heights_rank(node->right);
+
+        int lHeight=0;
+        int rHeight=0;
+        if(node->left){
+            lHeight=node->left->height;
+        }
+        if(node->right){
+            rHeight=node->right->height;
+        }
+
+        node->height=(max(lHeight,rHeight)+1);
+    }
+    Node *sorted_arr_to_tree_aux(S *keys, T *arr, int start, int end,Node* parent) {
         if (start > end) {
             return nullptr;
         }
+
         int middle = (start + end) / 2;
-        Node *new_root = new Node(keys[middle],arr[middle]);
-        new_root->left = sorted_arr_to_tree_aux(keys,arr, start, middle - 1);
-        new_root->right = sorted_arr_to_tree_aux(keys,arr, middle + 1, end);
+        Node *new_root = new Node(keys[middle], arr[middle]);
+        new_root->parent=parent;
+        new_root->left = sorted_arr_to_tree_aux(keys, arr, start, middle - 1,new_root);
+        new_root->right = sorted_arr_to_tree_aux(keys, arr, middle + 1, end,new_root);
         return new_root;
     }
 
@@ -264,6 +289,7 @@ private:
         destroy_tree(node->right);
         delete node;
     }
+
 
     /**
      * aux function for the insert - find a parent
@@ -334,12 +360,12 @@ private:
      * updates the tree after deleting a node.
      * @param node - the parent of the deleted node.
      */
-    void balance_fix(Node* node) {
+    void balance_fix(Node *node) {
         while (node) {
             int old_height = node->height;
             node->update_height();
             // need to move to the original parent of the node (before the roll)
-            Node* parent = node->parent;
+            Node *parent = node->parent;
             if (abs(node->BF()) == 2) {
                 node->roll();
                 update_root(node);
@@ -354,7 +380,7 @@ private:
      * updates root of the tree by the given node after a roll was activated.
      * @param node - the node that the roll was activated on.
      */
-    void update_root(Node* node) {
+    void update_root(Node *node) {
         if (node->parent->parent == NULL) {
             this->root = node->parent;
         }
@@ -366,17 +392,52 @@ private:
     * @param node - the node that will be added to the array.
     * @param i - index for inserting to the array.
     */
-    void tree_to_array_aux(T* arr,Node* node,int& i){
+    void tree_to_array_aux(T *arr, Node *node, int &i) {
         if (node == nullptr) {
             return;
         }
-        tree_to_array_aux(arr,node->left,i);
-        arr[i++]=node->data;
-        tree_to_array_aux(arr,node->right,i);
+        tree_to_array_aux(arr, node->left, i);
+        arr[i++] = node->data;
+        tree_to_array_aux(arr, node->right, i);
     }
 
-public:
+    void update_all_tree_aux(Node *root) {
+        if (root == nullptr) {
+            return;
+        }
+//Postorder Traversal
+        update_all_tree_aux(root->left);
+        update_all_tree_aux(root->right);
 
+        T lData = nullptr;
+        if (root->left) {
+            lData = root->left->data;
+        }
+
+        T rData = nullptr;
+        if (root->right) {
+            rData = root->right->data;
+        }
+        update_data(root->data, lData, rData);
+
+    }
+
+    void destroy_tree_and_data_aux(Node *node) {
+        if (node == nullptr) {
+            return;
+        }
+        destroy_tree(node->left);
+        destroy_tree(node->right);
+        delete node->data;
+    }
+public:
+    AVL_Tree(){
+        root = nullptr;
+        size=0;
+    }
+    void destroy_tree_and_data() {
+       destroy_tree_and_data_aux(root);
+    }
     /**
      * tree d'tor - deletes the tree and all of it's nodes.
      */
@@ -397,7 +458,9 @@ public:
      * @return data of the root.
      */
     T getRootData() {
-        return this->root->data;
+        if (root) {
+            return this->root->data;
+        }
     }
 
     /**
@@ -407,7 +470,7 @@ public:
      * @param node - pointer for the new node that was added to the tree.
      */
     void insert(const S &key, const T &data) {
-        Node* new_node = new Node(key, data);
+        Node *new_node = new Node(key, data);
         if (!root) {
             root = new_node;
         } else {
@@ -431,9 +494,9 @@ public:
      *                the data of the wanted node.
      */
     T search(const S &key) {
-        Node* wanted_node = find(key);
-        if(wanted_node) {
-            wanted_node->data;
+        Node *wanted_node = find(key);
+        if (wanted_node) {
+            return wanted_node->data;
         }
         return nullptr;
     }
@@ -443,7 +506,7 @@ public:
      * @param key - key of the wanted node.
      * @return
      */
-    Node* find(const S &key) {
+    Node *find(const S &key) {
         Node *found = internal_find(root, key);
         if (!found) {
             return nullptr;
@@ -464,9 +527,9 @@ public:
      * removes a node from the tree that the given pointer points at.
      * @param p - pointer for the node that need to be deleted.
      */
-    void remove_by_pointer(void* p) {
-        Node* node = (Node*)p;
-        Node* parent;
+    void remove_by_pointer(void *p) {
+        Node *node = (Node *) p;
+        Node *parent;
         if (node->right && node->left) {
             parent = node->next_inorder()->parent;
         } else {
@@ -536,24 +599,28 @@ public:
     * exporting inorder the tree to array.
     * @return array filled with the tree nodes inorder.
     */
-    T* tree_to_array(){
-        T* arr=new T[(this->size)* sizeof(T)];
-        int i=0;
-        tree_to_array_aux(arr,root,i);
-        if(i==0){
+    T *tree_to_array() {
+        T *arr = new T[(this->size) * sizeof(T)];
+        int i = 0;
+        tree_to_array_aux(arr, root, i);
+        if (i == 0) {
             return nullptr;
         }
         return arr;
     }
-    void sorted_arr_to_tree( S* keys,T *arr, int size) {
-        this->root = sorted_arr_to_tree_aux(keys,arr, 0, size - 1);
+
+    void sorted_arr_to_tree(S *keys, T *arr, int size_n) {
+        this->root = sorted_arr_to_tree_aux(keys, arr, 0, size_n - 1, nullptr);
+        update_all_tree_aux(root);
+        update_heights_rank(root);
     }
+
 
     /**
     * prints out the tree.
     */
     void print() {
-        if(this) {
+        if (this) {
             this->print_in_order(root);
 
         }

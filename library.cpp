@@ -123,3 +123,13 @@ void Quit(void **DS) {
     *DS=NULL;
 }
 
+/**
+ * ---for testing---
+ */
+void print(void *DS){
+    if(DS){
+        ((StaticEye *) DS)->print();
+        cout<<endl;
+    }
+}
+

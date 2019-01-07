@@ -119,6 +119,10 @@ StatusType MergeSuperPixels(void *DS, int imageID, int pixel1, int pixel2);
  */
 void Quit(void** DS);
 
+/**
+ * ---for testing---
+ */
+void print(void *DS);
 #ifdef __cplusplus
 }
 #endif
