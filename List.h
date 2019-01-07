@@ -44,7 +44,7 @@ class List {
         /**
          * node d'tor - deletes the given node.
          */
-        ~Node() = default;
+        ~Node()= default;
     };
 
 private:
@@ -162,6 +162,7 @@ public:
             node->next->prev = node->prev;
         }
 
+        delete node->data;//---------added------------
         delete node;
         this->size--;
     }
@@ -204,7 +205,18 @@ public:
             return nullptr;
         }
     }
-
+    void destroy() {
+        if (head) {
+            Node *node = this->head;
+            Node *next;
+            while (node != NULL) {
+                next = node->next;
+                delete node->data;
+                this->size--;
+                node = next;
+            }
+        }
+    }
 };
 
 #endif //MWET1_LIST_H

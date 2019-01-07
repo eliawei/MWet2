@@ -43,8 +43,97 @@ class UnionFind {
     int* parent;
     AVL_Tree<int, Label*, UpdateLabel>** labels;
 
+    Label **mergeArrays(Label **arr_a, Label **arr_b,int size_a,int size_b) {
+
+        if(size_a==0&&size_b==0){
+            return nullptr;
+        }
+        Label **merged_arr = new Label *[size_a + size_b];
+        for (int i = 0; i < size_a + size_b; ++i) {
+            merged_arr[i] = nullptr;
+        }
+        int i_a = 0;
+        int i_b = 0;
+        int i_merged = 0;
+        while (i_a < size_a && i_b < size_b) {
+            if (arr_a[i_a] < arr_b[i_b]) {
+                merged_arr[i_merged++] = arr_a[i_a++];
+            } else if (arr_a[i_a] > arr_b[i_b]) {
+                merged_arr[i_merged++] = arr_b[i_b++];
+            } else if (arr_a[i_a] == arr_b[i_b]) {
+                int new_score = arr_a[i_a]->getScore() + arr_b[i_b]->getScore();
+                arr_a[i_a]->setScore(new_score);
+                merged_arr[i_merged++] = arr_a[i_a];
+                i_a++;
+                i_b++;
+            }
+        }
+        while (i_a < size_a) {
+            merged_arr[i_merged++] = arr_a[i_a++];
+        }
+        while (i_b < size_b) {
+            merged_arr[i_merged++] = arr_a[i_b++];
+        }
+        return merged_arr;
+    }
+
+    AVL_Tree<int, Label *, UpdateLabel> *insertToTree(Label **arr,int size) {
+        AVL_Tree<int, Label *, UpdateLabel> *merged_tree = new AVL_Tree<int, Label *,
+                UpdateLabel>();
+        int* keys=new int[size];
+        for (int i = 0; i <size ; ++i) {
+            keys[i]=arr[i]->getLabel_id();
+        }
+        merged_tree->sorted_arr_to_tree(keys,arr,size);
+        return merged_tree;
+
+    }
+
+
+
+    AVL_Tree<int, Label *, UpdateLabel> *MergeTree(AVL_Tree<int, Label *, UpdateLabel> *a,
+                                                   AVL_Tree<int, Label *, UpdateLabel> *b) {
+        int size_a = a->getSize();
+        int size_b = b->getSize();
+        Label **arr_a= nullptr;
+        Label **arr_b= nullptr;
+        Label **merged_arr= nullptr;
+        AVL_Tree<int, Label *, UpdateLabel> *merged = nullptr;
+        if(size_a!=0){
+             arr_a = a->tree_to_array();
+        }
+        if(size_b!=0){
+             arr_b = b->tree_to_array();
+        }
+
+        if(size_a!=0||size_b!=0) {
+            merged_arr = mergeArrays(arr_a, arr_b,size_a,size_b);
+            merged = insertToTree(merged_arr,size_a+size_b);
+        }
+
+        delete a;
+        delete b;
+        delete[] arr_a;
+        delete[] arr_b;
+        delete[] merged_arr;
+        return merged;
+
+
+    }
 
 public:
+
+    /*void testUF(){
+        cout<<"----testing trees combination(from UF)----"<<endl;
+        Label** labelptr=new Label*[num_of_pixels];
+        for (int i = 0; i <num_of_pixels ; ++i) {
+            if(parent[i]==-1){
+              labelptr[i]=new Label(i,2);
+              labels[i]->insert(i,labelptr[i]);
+            }
+        }
+    }*/
+
     /**
      * initialize UnionFind class based on arrays with default values.
      * @param range - amount of pixels in each image.
@@ -128,7 +217,7 @@ public:
             parent[q] = p;
             size[p] += size[q];
             size[q] = 0;
-            //labels[p] = MergeTree(data[p], data[q]);
+            labels[p] = MergeTree(labels[p], labels[q]);
             labels[q] = nullptr;
             num_of_groups--;
 
@@ -137,7 +226,7 @@ public:
             parent[p] = q;
             size[q] += size[p];
             size[p] = 0;
-            //labels[q] = MergeTree(data[q], data[p]);
+            labels[q] = MergeTree(labels[q], labels[p]);
             labels[p] = nullptr;
             num_of_groups--;
 
@@ -150,11 +239,16 @@ public:
     }
 
     void print() {
-        cout << "num of groups: " << this->num_of_groups << "\n";
+        cout << "num of groups: " << this->num_of_groups << endl;
         for (int i = 0; i < this->num_of_groups; ++i) {
-            cout << "pixel num: " << i << " size is: " << size[i] << " parent is: " << parent[i] << " tree is: ";
-            labels[i]->print();
-            cout << "\n";
+            cout << "pixel num: " << i << " size is: " << size[i] << " parent is: " <<
+            parent[i] << " tree is: "<<endl;
+            if(labels[i]) {
+                labels[i]->print();
+            } else{
+                cout<<"doesnt exist"<<endl;
+            }
+            cout << endl;
         }
     }
 };

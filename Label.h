@@ -5,6 +5,9 @@
 #ifndef UNIONFIND_LABEL_H
 #define UNIONFIND_LABEL_H
 
+#include <ostream>
+
+
 class Label {
     int label_id; // id of the label.
     int score; // score that match the label.
@@ -77,7 +80,11 @@ public:
     void setMax_score(int max_score) {
         this->max_score = max_score;
     }
+
 };
+
+
+
 
 
 inline ostream& operator<<(ostream& os, const Label& label) {

@@ -1,90 +1,55 @@
-#include <iostream>
-#include "Hash.h"
-#include "assert.h"
-#include "Image.h"
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
 
-int main() {
-    Hash* hash1=new Hash();
-    const int arr_size=225;
-    Image* arr[arr_size];
-    int index=0;
-    try {
-        for (int i = 0; i < 897; i+=4) {
-            arr[index]=new Image(i,5);
-            hash1->insert(i,arr[index]);
-            index++;
-            hash1->print();
-        }//
-        for (int j = 0; j <120; j+=2) {
-            try {
-                cout << hash1->search(j)->get_id() << "was searched!" << endl;
-            }catch(...) {
-                cout<<j<<"not found";
-            }
-        }
-
-        for (int k = 0; k <arr_size; ++k) {
-                delete arr[k];
-        }
-
-    }
-
-
-catch (exception& e){
-        cout<<"kfiloot";
-    }
-
-delete hash1;
-
-
-UnionFind* uf = new UnionFind(50);
-
-for (int i = 0; i < 50; ++i) {
-    assert(uf->Find(i) == i);
-}
-
-for (int j = 0; j < 50; j+=2) {
-    assert(uf->Union(j,j+1) == j);
-}
-
-
-assert(uf->getNumOfGroups() == 25);
-
-delete uf;
-
-cout <<"\ngil's tests!!!:\n";
-    Image* arr2[100];
-    try {
-        for (int i = 0; i < 100; ++i) {
-            arr2[i]=new Image(i,6);
-        }
-
-        for (int i = 0; i < 100; ++i) {
-            arr2[i]->print();
-            for (int j = 0; j < 6; ++j) {
-                arr2[i]->SetImScore(j, 1, j);
-            }
-            arr2[i]->print();
-        }
-
-        for (int i = 0; i < 100; ++i) {
-            for (int j = 0; j < 6; j+=2) {
-                arr2[i]->MergeImSuperPixels(j, j+1);
-                arr2[i]->print();
-            }
-        }
-
-
-        for (int k = 0; k < 100; ++k) {
-            delete arr2[k];
-        }
-
-    }
-
-
-    catch (exception& e){
-        cout<<"gil failed";
-    }
-
-return 0;
+int main(int argc, char* argv[]) {
+  using std::cout;
+  cout << "\nWelcome to the Wet 2 Data structures tests                          \n"
+          "The tests were written by: Vova Parakhin.                           \n\n"
+          "------Passing those tests won't guarantee you a good grade------      \n"
+          "But they might get you closer :)                                      \n"
+          "You can change w/e you want in the file itself but make sure          \n"
+          "to contact me if you want to upload \'upgraded version\' of the file. \n"
+          "                                                                    \n\n"
+          "              _                                                       \n"
+          "             | |                                                      \n"
+          "             | |===( )   //////                                       \n"
+          "             |_|   |||  | o o|                                        \n"
+          "                    ||| ( c  )                  ____                  \n"
+          "                     ||| \\= /                  ||   \\_              \n"
+          "                      ||||||                   ||     |               \n"
+          "                      ||||||                ...||__/|-\"              \n"
+          "                      ||||||             __|________|__               \n"
+          "                        |||             |______________|              \n"
+          "                        |||             |    ENTER     |              \n"
+          "                        |||             |______________|              \n"
+          "                        |||             || ||      || ||              \n"
+          "                        |||             || ||      || ||              \n"
+          "------------------------|||-------------||-||------||-||-------       \n"
+          "                        |__>            || ||      || ||              \n"
+          "                                                                      \n"
+          "                                                                      \n"
+          "\033[1;31m            SMASH ENTER to continue             \033[0m     \n";
+  getchar();
+  int result = Catch::Session().run(argc, argv);
+  cout << "  __    __       ___      .______   .______   ____    ____            \n"
+          " |  |  |  |     /   \\     |   _  \\  |   _   \\ \\   \\  /   /       \n"
+          " |  |__|  |    /  ^  \\    |  |_)  | |  |_)  |  \\   \\/   /          \n"
+          " |   __   |   /  /_\\  \\   |   ___/  |   ___/    \\_    _/           \n"
+          " |  |  |  |  /  _____  \\  |  |      |  |          |  |               \n"
+          " |__|  |__| /__/     \\__\\ | _|      | _|          |__|              \n"
+          "                                                                      \n"
+          "  .__   __.  ___________    __    ____                                \n"
+          "  |  \\ |  | |   ____\\   \\  /  \\  /   /                            \n"
+          "  |   \\|  | |  |__   \\   \\/    \\/   /                             \n"
+          "  |  . `  | |   __|   \\            /                                 \n"
+          "  |  |\\   | |  |____   \\    /\\    /                                \n"
+          "  |__| \\__| |_______|   \\__/  \\__/                                 \n"
+          "                                                                      \n"
+          "  ____    ____  _______     ___      .______                          \n"
+          "  \\   \\  /   / |   ____|   /   \\     |   _  \\                     \n"
+          "   \\   \\/   /  |  |__     /  ^  \\    |  |_)  |                     \n"
+          "    \\_    _/   |   __|   /  /_\\  \\   |      /                      \n"
+          "      |  |     |  |____ /  _____  \\  |  |\\  \\----.                 \n"
+          "      |__|     |_______/__/     \\__\\ | _| `._____|                  \n";
+  return 0;
 }

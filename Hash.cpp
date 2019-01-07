@@ -17,7 +17,11 @@ Hash::Hash() : table(new List<int, Image *> *[table_size]) {
 Hash::~Hash() {
     //needs to delete every object?
     for (int i = 0; i < table_size; ++i) {
+        if(table[i]) {
+            table[i]->destroy();
+        }
         delete table[i];
+        table[i]= nullptr;
     }
     delete[] table;
 }
@@ -40,7 +44,12 @@ void Hash::remove(int key) {
 }
 
 Image *Hash::search(int key) {
-    int index = getIndex(key);
+    int index;
+    try {
+        index= getIndex(key);
+    }catch(hash_doesnt_exist& hde){
+        return nullptr;
+    }
     Image *data = table[index]->dataSearch(key);
     return data;
 }
@@ -108,15 +117,6 @@ void Hash::expand() {
     }
 
     copyElements(new_t, new_size);
-
-    //delete old lists from table
-    for (int j = 0; j < table_size; ++j) {
-        if (table[j]) {
-            delete table[j];
-        }
-    }
-    delete[] table;
-
     table_size = new_size;
     table = new_t;
 }
@@ -130,14 +130,6 @@ void Hash::compress() {
     }
     copyElements(new_t, new_size);
 
-    //delete old lists from table
-    for (int j = 0; j < table_size; ++j) {
-        if (table[j]) {
-            delete table[j];
-        }
-    }
-    delete[] table;
-
     table_size = new_size;
     table = new_t;
 }
@@ -145,11 +137,16 @@ void Hash::compress() {
 void Hash::copyElements(List<int, Image*> **dst, int new_size) {
     for (int i = 0; i < table_size; ++i) {
         if (table[i]) {
+
             for (Image* iter = table[i]->GetFirst(); iter != nullptr; iter = table[i]->GetNext()) {
                 insertToTable(dst, iter->get_id(), iter, new_size);
             }
+            //delete old lists from table
+            delete table[i];
+            table[i]= nullptr;
         }
     }
+    delete [] table;
 }
 
 

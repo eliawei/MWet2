@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "exceptions.h"
+
 using namespace std;
 
 template<class S, class T,class UpdateFunc>
@@ -209,7 +210,7 @@ class AVL_Tree {
             }
 
             cout << " key: " << key << " parent: " << parent_key <<
-                 " Data: " << *data  <<
+                 //" Data: " << data  <<
                  " left: " << left_key << " right: " << right_key << " height: " << height << endl;
         }
     };
@@ -238,6 +239,17 @@ private:
             update_data(node->data, lData, rData);
             node=node->parent;
         }
+    }
+
+    Node *sorted_arr_to_tree_aux(S* keys, T *arr, int start, int end) {
+        if (start > end) {
+            return nullptr;
+        }
+        int middle = (start + end) / 2;
+        Node *new_root = new Node(keys[middle],arr[middle]);
+        new_root->left = sorted_arr_to_tree_aux(keys,arr, start, middle - 1);
+        new_root->right = sorted_arr_to_tree_aux(keys,arr, middle + 1, end);
+        return new_root;
     }
 
     /**
@@ -528,7 +540,13 @@ public:
         T* arr=new T[(this->size)* sizeof(T)];
         int i=0;
         tree_to_array_aux(arr,root,i);
+        if(i==0){
+            return nullptr;
+        }
         return arr;
+    }
+    void sorted_arr_to_tree( S* keys,T *arr, int size) {
+        this->root = sorted_arr_to_tree_aux(keys,arr, 0, size - 1);
     }
 
     /**
