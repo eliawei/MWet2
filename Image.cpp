@@ -17,28 +17,35 @@ int Image::get_id() {
 }
 
 void Image::SetImScore(int pixel, int label, int score) {
-    AVL_Tree<int, Label *, UpdateLabel> *tree = super_pixels->FindData(pixel);
-    Label *wanted_label = tree->search(label);
-
-    if (!wanted_label) {
-        Label *new_label = new Label(label, score);
+    AVL_Tree<int, shared_ptr<Label>, UpdateLabel>* tree = super_pixels->FindData(pixel);
+    shared_ptr<Label> wanted_label= nullptr;
+    if(tree) {
+      wanted_label = tree->search(label);
+    }
+    if (!wanted_label&&tree) {
+        shared_ptr<Label>new_label( new Label(label, score));
         tree->insert(label, new_label);
-    } else {
+    } else if(tree){
         wanted_label->setScore(score);
     }
 }
 
 void Image::RemoveImLabel(int pixel, int label) {
-    AVL_Tree<int, Label *, UpdateLabel> *tree = super_pixels->FindData(pixel);
-    if (tree->search(label)== nullptr) {
+    AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *tree = super_pixels->FindData(pixel);
+    if (tree && tree->search(label) == nullptr) {
         throw avl_doesnt_exist();
     }
-    tree->remove_by_key(label);
+    if (tree) {
+        tree->remove_by_key(label);
+    }
 }
 
 int Image::GetImMaxLabel(int pixel) {
-    AVL_Tree<int, Label *, UpdateLabel> *tree = super_pixels->FindData(pixel);
-    Label *root_label = tree->getRootData();
+    AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *tree = super_pixels->FindData(pixel);
+    shared_ptr<Label> root_label= nullptr;
+    if(tree) {
+        root_label = tree->getRootData();
+    }
     if (!root_label) {
         throw not_labeled();
     }

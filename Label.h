@@ -9,10 +9,10 @@
 
 
 class Label {
-    int label_id; // id of the label.
-    int score; // score that match the label.
-    int max_label; // the label with the highest score in the subtree.
-    int max_score; // the highest score in the subtree.
+    int label_id=-1; // id of the label.
+    int score=-1; // score that match the label.
+    int max_label=-1; // the label with the highest score in the subtree.
+    int max_score=-1; // the highest score in the subtree.
 
 public:
     friend ostream& operator<<(ostream& os, const Label& label);

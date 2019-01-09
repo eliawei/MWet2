@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "exceptions.h"
-
+#include <memory>
 using namespace std;
 
 template<class S, class T, class UpdateFunc>
@@ -296,7 +296,7 @@ private:
         destroy_tree(node->left);
         destroy_tree(node->right);
         if(node->key!=-1) {
-            delete node->data;
+           //delete node->data;
         }
         delete node;
     }
@@ -467,9 +467,10 @@ public:
      * @return data of the root.
      */
     T getRootData() {
-        if (root) {
+        if (root!= nullptr) {
             return this->root->data;
         }
+        return nullptr;
     }
 
     /**
@@ -580,10 +581,10 @@ public:
                     temp->parent = node->parent;
                 }
                 if(node->data) {
-                    delete node->data;
-                    node->data= nullptr;
+                   //delete node->data;
+                    //node->data= nullptr;
                 }
-                // delete node->data;
+                ////delete node->data;
                 delete node;
 
                 return temp;
@@ -597,10 +598,10 @@ public:
 
                 //temp->parent = node->parent;
                 if(node->data) {
-                    delete node->data;
-                    node->data= nullptr;
+                   //delete node->data;
+                    //node->data= nullptr;
                 }
-               // delete node->data;
+               ////delete node->data;
                 delete node;
 
                 return temp;
@@ -608,7 +609,7 @@ public:
             //Case 2- has 2 children
             Node *temp = node->next_inorder();
             node->key = temp->key;
-            delete node->data;
+           //delete node->data;
             node->data = temp->data;
             temp->data = nullptr;
             node->right = remove_by_pointer(node->right, temp->key);
@@ -630,10 +631,11 @@ public:
         return arr;
     }
 
-    void sorted_arr_to_tree(S *keys, T *arr, int size_n) {
+    void sorted_arr_to_tree(S *keys, T* arr, int size_n) {
         this->root = sorted_arr_to_tree_aux(keys, arr, 0, size_n - 1, nullptr);
         update_all_tree_aux(root);
         update_heights_rank(root);
+        size=size_n;
     }
 
 
