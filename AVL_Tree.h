@@ -37,7 +37,8 @@ class AVL_Tree {
         * node d'tor - deletes the node and it's data.
         */
         ~Node() {
-            delete this->data;
+            this->key= -1;
+            data=nullptr;
         }
 
         /**
@@ -294,9 +295,21 @@ private:
         }
         destroy_tree(node->left);
         destroy_tree(node->right);
+        if(node->key!=-1) {
+            delete node->data;
+        }
         delete node;
     }
 
+    void destroy_without_data_tree_aux(Node *node) {
+        if (node == nullptr) {
+            return;
+        }
+        destroy_tree(node->left);
+        destroy_tree(node->right);
+
+        delete node;
+    }
     /**
      * aux function for the insert - find a parent
      *                               for a new node that match the given key.
@@ -566,7 +579,13 @@ public:
                 if (temp) {
                     temp->parent = node->parent;
                 }
+                if(node->data) {
+                    delete node->data;
+                    node->data= nullptr;
+                }
+                // delete node->data;
                 delete node;
+
                 return temp;
             }
             if (!node->left) {
@@ -576,11 +595,14 @@ public:
                     temp->parent = node->parent;
                 }
 
-                temp->parent = node->parent;
+                //temp->parent = node->parent;
                 if(node->data) {
                     delete node->data;
+                    node->data= nullptr;
                 }
+               // delete node->data;
                 delete node;
+
                 return temp;
             }
             //Case 2- has 2 children
@@ -637,6 +659,10 @@ public:
         print_in_order(node->left);
         node->print_node();
         print_in_order(node->right);
+    }
+
+    void destroy_without_data_tree(){
+        destroy_without_data_tree_aux(root);
     }
 
 

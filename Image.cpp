@@ -30,7 +30,7 @@ void Image::SetImScore(int pixel, int label, int score) {
 
 void Image::RemoveImLabel(int pixel, int label) {
     AVL_Tree<int, Label *, UpdateLabel> *tree = super_pixels->FindData(pixel);
-    if (!tree->search(label)) {
+    if (tree->search(label)== nullptr) {
         throw avl_doesnt_exist();
     }
     tree->remove_by_key(label);

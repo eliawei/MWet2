@@ -43,23 +43,6 @@ public:
         Label *max = maxLabel(maxLabel(label, r), l);
         label->setMax_label(max->getLabel_id());
         label->setMax_score(max->getScore());
-        /*
-        int max_score = label->getScore();
-        int max_label = label->getLabel_id();
-
-        if(l && l->getScore() > max_score) {
-            max_score = l->getScore();
-            max_label = l->getLabel_id();
-        }
-
-        if(r && r->getScore() >= max_score) {
-            max_score = r->getScore();
-            max_label = r->getLabel_id();
-        }
-
-        label->setMax_label(max_label);
-        label->setMax_score(max_score);
-         */
     }
 };
 
@@ -183,7 +166,7 @@ public:
         delete[] this->parent;
 
         for (int i = 0; i < num_of_pixels; ++i) {
-             delete this->labels[i];
+                delete this->labels[i];
         }
 
         delete[] this->labels;
@@ -235,11 +218,11 @@ public:
             size[p] += size[q];
             size[q] = 0;
             AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
-            delete labels[q];
+          //  delete labels[q];
             delete labels[p];
 
             labels[p] = new_t;
-            labels[q] = nullptr;
+           // labels[q] = nullptr;
             num_of_groups--;
 
             return p;
@@ -248,11 +231,11 @@ public:
             size[q] += size[p];
             size[p] = 0;
             AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
-            delete labels[p];
+           // delete labels[p];
             delete labels[q];
 
             labels[q] = new_t;
-            labels[p] = nullptr;
+            //labels[p] = nullptr;
             num_of_groups--;
 
             return q;
