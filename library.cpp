@@ -49,12 +49,12 @@ StatusType DeleteImage(void *DS, int imageID) {
 
 StatusType SetLabelScore(void *DS, int imageID, int pixel, int label, int score) {
     if (!DS || imageID <= 0 || pixel < 0 || label <= 0 || score <= 0 ||
-        pixel >= (((StaticEye *) DS)
-                ->getPixels())) {
+        pixel >= (((StaticEye *) DS)->getPixels())) {
         return INVALID_INPUT;
     }
     try {
         ((StaticEye *) DS)->setScore(imageID, pixel, label, score);
+
     } catch (bad_alloc &ba) {
         return ALLOCATION_ERROR;
     } catch (hash_doesnt_exist &hde) {

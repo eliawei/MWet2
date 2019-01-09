@@ -23,6 +23,15 @@ public:
      */
     Label(int label, int score) : label_id(label), score(score), max_label(-1), max_score(-1) {}
 
+    /**
+     * copy c'tor constructs a label by
+     * @param label - the given label
+     */
+
+    Label(const Label& label) : label_id(label.label_id), score(label.score),
+                                 max_label(label.max_label),
+                                 max_score(label.max_score) {}
+
 
     /**
      * get label_id field.

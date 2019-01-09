@@ -72,45 +72,36 @@ class UnionFind {
 
     Label **mergeArrays(Label **arr_a, Label **arr_b, int size_a, int size_b, int *new_size) {
 
-        Label **merged_arr = new Label *[size_a + size_b];
+        Label** merged_arr = new Label*[size_a + size_b];
         for (int i = 0; i < size_a + size_b; ++i) {
             merged_arr[i] = nullptr;
         }
         int i_a = 0;
         int i_b = 0;
-        int i_merged = 0;
 
         while (i_a < size_a && i_b < size_b) {
             if (arr_a[i_a]->getLabel_id() < arr_b[i_b]->getLabel_id()) {
-                merged_arr[i_merged++] = arr_a[i_a++];
-                (*new_size)++;
+                merged_arr[(*new_size)++] = arr_a[i_a++];
             } else if (arr_a[i_a]->getLabel_id() > arr_b[i_b]->getLabel_id()) {
-                merged_arr[i_merged++] = arr_b[i_b++];
-                (*new_size)++;
-            } else if (arr_a[i_a]->getLabel_id() == arr_b[i_b]->getLabel_id()) {
+                merged_arr[(*new_size)++] = arr_b[i_b++];
+            } else {
                 int new_score = arr_a[i_a]->getScore() + arr_b[i_b]->getScore();
                 arr_a[i_a]->setScore(new_score);
-                merged_arr[i_merged++] = arr_a[i_a];
-                delete arr_b[i_b];
-                i_a++;
+                merged_arr[(*new_size)++] = arr_a[i_a++];
                 i_b++;
-                (*new_size)++;
             }
         }
         while (i_a < size_a) {
-            merged_arr[i_merged++] = arr_a[i_a++];
-            (*new_size)++;
+            merged_arr[(*new_size)++] = arr_a[i_a++];
         }
         while (i_b < size_b) {
-            merged_arr[i_merged++] = arr_b[i_b++];
-            (*new_size)++;
+            merged_arr[(*new_size)++] = arr_b[i_b++];
         }
         return merged_arr;
     }
 
     AVL_Tree<int, Label *, UpdateLabel> *insertToTree(Label **arr, int size) {
-        AVL_Tree<int, Label *, UpdateLabel> *merged_tree = new AVL_Tree<int, Label *,
-                UpdateLabel>();
+        AVL_Tree<int, Label *, UpdateLabel> *merged_tree = new AVL_Tree<int, Label *,UpdateLabel>();
         int *keys = new int[size];
         for (int i = 0; i < size; ++i) {
             keys[i] = arr[i]->getLabel_id();
@@ -118,7 +109,6 @@ class UnionFind {
         merged_tree->sorted_arr_to_tree(keys, arr, size);
         delete[]keys;
         return merged_tree;
-
     }
 
 
@@ -150,15 +140,12 @@ class UnionFind {
             int new_size = 0;
             merged_arr = mergeArrays(arr_a, arr_b, size_a, size_b, &new_size);
             merged = insertToTree(merged_arr, new_size);
-
         }
 
         delete[] arr_a;
         delete[] arr_b;
         delete[] merged_arr;
         return merged;
-
-
     }
 
 public:
@@ -250,6 +237,7 @@ public:
             AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
             delete labels[q];
             delete labels[p];
+
             labels[p] = new_t;
             labels[q] = nullptr;
             num_of_groups--;
@@ -260,8 +248,8 @@ public:
             size[q] += size[p];
             size[p] = 0;
             AVL_Tree<int, Label *, UpdateLabel> *new_t = MergeTree(labels[q], labels[p]);
-            delete labels[q];
             delete labels[p];
+            delete labels[q];
 
             labels[q] = new_t;
             labels[p] = nullptr;

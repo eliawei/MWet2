@@ -34,6 +34,13 @@ class AVL_Tree {
         Node(const S &key, const T &data) : key(key), data(data) {}
 
         /**
+        * node d'tor - deletes the node and it's data.
+        */
+        ~Node() {
+            delete this->data;
+        }
+
+        /**
          * indicates if the node is right or left son.
          * @return true if the node is right son and false otherwise.
          */
@@ -404,7 +411,7 @@ private:
         if (root == nullptr) {
             return;
         }
-//Postorder Traversal
+        //Postorder Traversal
         update_all_tree_aux(root->left);
         update_all_tree_aux(root->right);
 
@@ -418,7 +425,6 @@ private:
             rData = root->right->data;
         }
         update_data(root->data, lData, rData);
-
     }
 
 
