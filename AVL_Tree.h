@@ -195,33 +195,6 @@ class AVL_Tree {
             }
 
         }
-
-        void print_node() {
-            int left_key;
-            if (left) {
-                left_key = left->key;
-            } else {
-                left_key = -1;
-            }
-            int right_key;
-            if (right) {
-                right_key = right->key;
-            } else {
-                right_key = -1;
-            }
-
-            int parent_key;
-            if (parent) {
-                parent_key = parent->key;
-            } else {
-                parent_key = -1;
-            }
-
-            cout << " key: " << key << " parent: " << parent_key <<
-                 //" Data: " << data  <<
-                 " left: " << left_key << " right: " << right_key << " height: " << height
-                 << endl;
-        }
     };
 
 private:
@@ -296,20 +269,10 @@ private:
         destroy_tree(node->left);
         destroy_tree(node->right);
         if(node->key!=-1) {
-           //delete node->data;
         }
         delete node;
     }
 
-    void destroy_without_data_tree_aux(Node *node) {
-        if (node == nullptr) {
-            return;
-        }
-        destroy_tree(node->left);
-        destroy_tree(node->right);
-
-        delete node;
-    }
     /**
      * aux function for the insert - find a parent
      *                               for a new node that match the given key.
@@ -324,13 +287,14 @@ private:
             if (node->left == nullptr) {
                 return node;
             }
-            find_free_space(node->left, key);
-        } else if (node->key < key) {
-            if (node->right == nullptr) {
-                return node;
-            }
-            find_free_space(node->right, key);
+            return find_free_space(node->left, key);
         }
+
+        if (node->right == nullptr) {
+            return node;
+        }
+
+        return find_free_space(node->right, key);
     }
 
     /**
@@ -580,11 +544,6 @@ public:
                 if (temp) {
                     temp->parent = node->parent;
                 }
-                if(node->data) {
-                   //delete node->data;
-                    //node->data= nullptr;
-                }
-                ////delete node->data;
                 delete node;
 
                 return temp;
@@ -595,13 +554,6 @@ public:
                 if (temp) {
                     temp->parent = node->parent;
                 }
-
-                //temp->parent = node->parent;
-                if(node->data) {
-                   //delete node->data;
-                    //node->data= nullptr;
-                }
-               ////delete node->data;
                 delete node;
 
                 return temp;
@@ -609,7 +561,6 @@ public:
             //Case 2- has 2 children
             Node *temp = node->next_inorder();
             node->key = temp->key;
-           //delete node->data;
             node->data = temp->data;
             temp->data = nullptr;
             node->right = remove_by_pointer(node->right, temp->key);
@@ -638,36 +589,10 @@ public:
         size=size_n;
     }
 
-
-    /**
-    * prints out the tree.
-    */
-    void print() {
-        if (this) {
-            this->print_in_order(root);
-
-        }
+    void update_path(S key){
+        Node* node = this->find(key);
+        update_path_data(node);
     }
-
-    /**
-    * Prints out the tree in an in order method.
-    * @param root: starts from given root.
-    */
-    void print_in_order(Node *node) {
-
-        if (node == nullptr) {
-            return;
-        }
-        print_in_order(node->left);
-        node->print_node();
-        print_in_order(node->right);
-    }
-
-    void destroy_without_data_tree(){
-        destroy_without_data_tree_aux(root);
-    }
-
-
 
 };
 

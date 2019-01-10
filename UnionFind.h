@@ -20,7 +20,7 @@ class UpdateLabel {
                 return l1;
             } else if (l2->getScore() > l1->getScore()) {
                 return l2;
-            } else if (l1->getScore() > l2->getScore()) {
+            } else if (l1->getLabel_id() > l2->getLabel_id()) {
                 return l1;
             } else {
                 return l2;
@@ -29,9 +29,8 @@ class UpdateLabel {
         if (l1) {
             return l1;
         }
-        if (l2) {
+
             return l2;
-        }
     }
 
 public:
@@ -45,7 +44,6 @@ public:
 
         shared_ptr<Label> max = maxLabel(maxLabel(label, r), l);
         label->setMax_label(max->getLabel_id());
-        label->setMax_score(max->getScore());
     }
 };
 
@@ -245,13 +243,10 @@ public:
             parent[q] = p;
             size[p] += size[q];
             size[q] = 0;
-            AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *new_t = MergeTree(labels[q],
-                                                                             labels[p]);
-            //  delete labels[q];
+            AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *new_t = MergeTree(labels[q],labels[p]);
             delete labels[p];
 
             labels[p] = new_t;
-            // labels[q] = nullptr;
             num_of_groups--;
 
             return p;
@@ -259,36 +254,16 @@ public:
             parent[p] = q;
             size[q] += size[p];
             size[p] = 0;
-            AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *new_t = MergeTree(labels[q],
-                                                                             labels[p]);
-            // delete labels[p];
+            AVL_Tree<int, shared_ptr<Label>, UpdateLabel> *new_t = MergeTree(labels[q],labels[p]);
             delete labels[q];
 
             labels[q] = new_t;
-            //labels[p] = nullptr;
             num_of_groups--;
 
             return q;
         }
     }
 
-    int getNumOfGroups() {
-        return this->num_of_groups;
-    }
-
-    void print() {
-        cout << "num of groups: " << this->num_of_groups << endl;
-        for (int i = 0; i < this->num_of_groups; ++i) {
-            cout << "pixel num: " << i << " size is: " << size[i] << " parent is: " <<
-                 parent[i] << " tree is: " << endl;
-            if (labels[i]) {
-                labels[i]->print();
-            } else {
-                cout << "doesnt exist" << endl;
-            }
-            cout << endl;
-        }
-    }
 };
 
 

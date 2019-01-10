@@ -18,14 +18,6 @@ class List {
         Node *next; // the next node in the list.
         Node *prev; // the previous node in the list.
 
-        /**
-         * functions for testing
-         */
-        void print() {
-
-            cout << key << " ";
-        }
-
         friend class List; // now class List can access private members of Node
 
     public:
@@ -166,37 +158,12 @@ public:
         delete node;
         this->size--;
     }
-    /**
-       * exporting the list's keys to array.
-       * @param keys_arr - an empty array.
-       * @return the array filled with the list's keys.
-       */
-    K* list_to_array_keys(K* keys_arr){
-
-        int i=0;
-
-        for (Node* node=head; node!= nullptr ; node=node->next) {
-            keys_arr[i++]=node->data;
-        }
-
-        return keys_arr;
-    }
-
-    /**
-     * test functions
-     */
-    void print() {
-        Node *node = this->head;
-        while (node != NULL) {
-            node->print();
-            node = node->next;
-        }
-    }
 
     D GetFirst(){
         iterator=head;
         return iterator->data;
     }
+
     D GetNext(){
         iterator=iterator->next;
         if(iterator) {
@@ -205,6 +172,7 @@ public:
             return nullptr;
         }
     }
+
     void destroy() {
         if (head) {
             Node *node = this->head;

@@ -44,7 +44,7 @@ int StaticEye::getMaxLabel(int image_id, int pixel) {
     if(!im){
         throw hash_doesnt_exist();
     }
-    im->GetImMaxLabel(pixel);
+    return im->GetImMaxLabel(pixel);
 }
 
 void StaticEye::mergeSuperPixels(int image_id, int pixel1, int pixel2) {
@@ -55,9 +55,6 @@ void StaticEye::mergeSuperPixels(int image_id, int pixel1, int pixel2) {
     im->MergeImSuperPixels(pixel1,pixel2);
 }
 
-void StaticEye::print() {
-    images->print();
-}
 
 int StaticEye::getPixels() const {
     return pixels;

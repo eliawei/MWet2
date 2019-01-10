@@ -78,27 +78,6 @@ public:
      */
     Image* search(int key);
 
-    /**
-     * testing functions
-     */
-    void print(){
-        int cnt=0;
-        for (int i = 0; i <table_size ; ++i) {
-            if(table[i]){
-                cnt++;
-              //  cout<<"list number: "<<i<<endl;
-                table[i]->print();
-            }else{
-                cout<<"--- ";
-            }
-        }
-        cout<<"num of lists:"<<cnt<<endl;
-        cout<<"num of elements:"<<num_elements<<endl;
-
-        cout<<endl;
-        cout<<"table size is:"<<table_size<<endl;
-    }
-
 };
 
 

@@ -96,7 +96,7 @@ int main(int argc, const char**argv) {
     FILE *rfile;
 
     int counter = 0;
-    for(int i=0; i < 9; i++) {
+    for(int i=0; i < 25; i++) {
         rfile_string = randTest + std::to_string(i) + dotIn;
         wfile_string = result + std::to_string(i) + dotOut;
         rfile = fopen(rfile_string.c_str(), "r");

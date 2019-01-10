@@ -62,11 +62,6 @@ public:
      */
     void MergeImSuperPixels(int pixel1, int pixel2);
 
-    void print() {
-        cout << "\nthe id is: " << this->id << " the UF is:\n";
-        this->super_pixels->print();
-        cout << "\n";
-    }
 };
 
 

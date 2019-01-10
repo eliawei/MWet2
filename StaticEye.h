@@ -29,10 +29,6 @@ public:
 
     int getPixels() const;
 
-    /**
-     * -----testing functions-----
-     */
-    void print();
 };
 
 

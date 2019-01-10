@@ -22,11 +22,13 @@ void Image::SetImScore(int pixel, int label, int score) {
     if(tree) {
       wanted_label = tree->search(label);
     }
-    if (!wanted_label&&tree) {
-        shared_ptr<Label>new_label( new Label(label, score));
+    if ((!wanted_label) && tree) {
+        shared_ptr<Label>new_label(new Label(label, score));
         tree->insert(label, new_label);
     } else if(tree){
-        wanted_label->setScore(score);
+        tree->remove_by_key(label);
+        shared_ptr<Label>new_label(new Label(label, score));
+        tree->insert(label, new_label);
     }
 }
 
